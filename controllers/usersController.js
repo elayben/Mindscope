@@ -1,21 +1,8 @@
 // controllers/usersController.js
 const db = require('../db');
+const bcrypt = require('bcrypt');
 
-// Create User
-exports.createUser = async (req, res) => {
-  const { first_name, last_name, country, year_of_birth } = req.body;
-  try {
-    const [result] = await db.execute(
-      `INSERT INTO person (first_name, last_name, country, year_of_birth) 
-       VALUES (?, ?, ?, ?)`,
-      [first_name, last_name, country, year_of_birth]
-    );
-    res.status(201).json({ id: result.insertId, message: 'User created' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to create user' });
-  }
-};
+
 
 // Read All Users
 exports.getUsers = async (req, res) => {
@@ -27,6 +14,61 @@ exports.getUsers = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 };
+
+
+// Register Person
+exports.registerUser = async (req, res) => {
+  const { first_name, last_name, birth_year, country_code, password } = req.body;
+
+  if (!first_name || !last_name || !birth_year || !country_code || !password) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  try {
+    // Insert new person
+    const [result] = await db.execute(
+      `INSERT INTO person (first_name, last_name, birth_year, country_code, password) VALUES (?, ?, ?, ?, ?)`,
+      [first_name, last_name, birth_year, country_code, password]
+    );
+
+    const personId = result.insertId; 
+
+    res.status(201).json({
+      message: 'User registered successfully',
+      person_id: personId,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to register user' });
+  }
+};
+
+
+// Login Person
+exports.loginUser = async (req, res) => {
+  const { first_name, last_name, password } = req.body;
+
+  if (!first_name || !last_name || !password) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  try {
+    const [rows] = await db.execute(
+      `SELECT * FROM person WHERE first_name = ? AND last_name = ? AND password = ?`,
+      [first_name, last_name, password]
+    );
+
+    if (rows.length === 0) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    res.json({ message: 'Login successful' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to login' });
+  }
+};
+
 
 // Update User
 exports.updateUser = async (req, res) => {
