@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use('/api/users', userRoutes);
 app.use('/api/disorders', disorderRoutes);
-app.use('/api', countryRoutes);
+app.use('/api/countries', countryRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);

@@ -1,8 +1,8 @@
 // routes/countries.js
 const express = require('express');
 const router = express.Router();
-const { getAllCountriesWithCodes } = require('../controllers/disorderDataController');
+const countriesController = require('../controllers/countriesController');
 
-router.get('/countries', getAllCountriesWithCodes);
+router.get('/', countriesController.getAllCountriesWithCodes);
 
 module.exports = router;

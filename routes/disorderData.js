@@ -14,6 +14,5 @@ router.get('/gender-gap', disorderController.getLargestGenderGapInDepression);
 router.get('/min-daly-difference/:year', disorderController.getMinDalyDifferenceAnxiety);
 router.get('/top-daly-improvement', disorderController.getTopCountriesDalyImprovement);
 router.get('/correlation/:disorder1/:disorder2', disorderController.getDisorderCorrelation);
-router.get('/all-countries/', disorderController.getAllCountriesWithCodes);
 
 module.exports = router;
