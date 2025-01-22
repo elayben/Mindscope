@@ -1,6 +1,7 @@
 // controllers/disorderDataController.js
 const db = require('../db');
 
+// Done
 // (2) Top 3 disorders (and their prevalences) in a given country
 exports.getTopDisorders = async (req, res) => {
   const { countryCode } = req.params;
@@ -23,6 +24,7 @@ exports.getTopDisorders = async (req, res) => {
   }
 };
 
+// Done
 // (3) DALY growth during the years of a given country
 exports.getDalyGrowth = async (req, res) => {
   const { countryCode, disorderId } = req.params;
@@ -40,6 +42,7 @@ exports.getDalyGrowth = async (req, res) => {
   }
 };
 
+// Done
 // (4) Gender comparison for depression prevalence
 exports.getDepressionGenderComparison = async (req, res) => {
   const { countryCode } = req.params;
@@ -65,6 +68,8 @@ exports.getDepressionGenderComparison = async (req, res) => {
   }
 };
 
+
+// Done
 // (5) DALY of all countries in a given year
 exports.getDalyByYear = async (req, res) => {
   const { year, disorderId } = req.params;
@@ -82,6 +87,7 @@ exports.getDalyByYear = async (req, res) => {
   }
 };
 
+// Done
 // (6) Top ten countries with a given disorder
 exports.getTopCountriesByDisorder = async (req, res) => {
   const { disorderId } = req.params;
@@ -102,6 +108,7 @@ exports.getTopCountriesByDisorder = async (req, res) => {
   }
 };
 
+// Done
 // (7) Disorder prevalence per continent
 exports.getDisorderPrevalenceByContinent = async (req, res) => {
   try {
@@ -119,6 +126,7 @@ exports.getDisorderPrevalenceByContinent = async (req, res) => {
   }
 };
 
+// Done
 // (8) Trend line of the last 10 years
 exports.getTrendLine = async (req, res) => {
   const { countryCode } = req.params;
@@ -139,8 +147,9 @@ exports.getTrendLine = async (req, res) => {
   }
 };
 
-// (9) Country with largest gender gap in depression max year
-exports.getLargestGenderGapInDepression = async (req, res) => {
+// Done
+// (Updated) Top 5 Countries with Largest Gender Gap in Depression
+exports.getTop5GenderGapInDepression = async (req, res) => {
   try {
     const [rows] = await db.execute(
       `SELECT c.country_name, 
@@ -152,23 +161,26 @@ exports.getLargestGenderGapInDepression = async (req, res) => {
          AND iy.year = (SELECT MAX(year) FROM in_year)
        GROUP BY c.country_name
        ORDER BY gender_gap DESC
-       LIMIT 1`
+       LIMIT 5`
     );
-    res.json(rows[0]);
+    res.json(rows);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to fetch largest gender gap in depression' });
+    res.status(500).json({ error: 'Failed to fetch top 5 gender gap in depression' });
   }
 };
 
+
+
+// Done
 // (10) Minimum DALY difference of anxiety between two countries in a given year
 exports.getMinDalyDifferenceAnxiety = async (req, res) => {
   const { year } = req.params;
   try {
     const [rows] = await db.execute(
       `SELECT 
-          d1.country_code AS country1,
-          d2.country_code AS country2,
+          c1.country_name AS country1,
+          c2.country_name AS country2,
           ABS(d1.daly - d2.daly) AS daly_difference,
           ABS(iy1.prevalence - iy2.prevalence) AS prevalence_difference
        FROM daly_table d1
@@ -184,6 +196,8 @@ exports.getMinDalyDifferenceAnxiety = async (req, res) => {
            ON d2.country_code = iy2.country_code 
            AND d2.year = iy2.year 
            AND d2.disorder_id = iy2.disorder_id
+       JOIN countries c1 ON d1.country_code = c1.country_code
+       JOIN countries c2 ON d2.country_code = c2.country_code
        WHERE d1.disorder_id = 4
          AND d1.year = ?
        ORDER BY daly_difference ASC
@@ -197,6 +211,8 @@ exports.getMinDalyDifferenceAnxiety = async (req, res) => {
   }
 };
 
+
+// Done
 // (11) Top 5 countries with most improvement (DALY reduction)
 exports.getTopCountriesDalyImprovement = async (req, res) => {
   try {
@@ -236,6 +252,7 @@ exports.getTopCountriesDalyImprovement = async (req, res) => {
   }
 };
 
+// Done
 // (12) Disorder correlation globally
 exports.getDisorderCorrelation = async (req, res) => {
   const { disorder1, disorder2 } = req.params;

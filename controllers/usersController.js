@@ -52,8 +52,11 @@ exports.loginUser = async (req, res) => {
   }
 
   try {
+    // Fetch user details along with birth_year and country_code
     const [rows] = await db.execute(
-      `SELECT * FROM person WHERE first_name = ? AND last_name = ? AND password = ?`,
+      `SELECT first_name, last_name, birth_year, country_code 
+       FROM person 
+       WHERE first_name = ? AND last_name = ? AND password = ?`,
       [first_name, last_name, password]
     );
 
@@ -61,12 +64,23 @@ exports.loginUser = async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    res.json({ message: 'Login successful' });
+    // Include birth_year and country_code in the response
+    const user = rows[0];
+    res.json({
+      message: 'Login successful',
+      user: {
+        firstName: user.first_name,
+        lastName: user.last_name,
+        birthYear: user.birth_year,
+        birthCountry: user.country_code,
+      },
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to login' });
   }
 };
+
 
 
 // Update User
