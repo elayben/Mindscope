@@ -1,6 +1,18 @@
 // controllers/disorderDataController.js
 const db = require('../db');
 
+// (1) Get all disorders and their codes
+exports.getAllDisorders = async (req, res) => {
+  try {
+    const [rows] = await db.execute(`SELECT * FROM disorders`);
+    res.json(rows);
+  } catch (error) {
+    console.error('Failed to fetch all disorders:', error);
+    res.status(500).json({ error: 'Failed to fetch all disorders' });
+  }
+};
+
+
 // Done
 // (2) Top 3 disorders (and their prevalences) in a given country
 exports.getTopDisorders = async (req, res) => {

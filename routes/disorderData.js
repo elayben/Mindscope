@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const disorderController = require('../controllers/disorderDataController');
 
+router.get('/all', disorderController.getAllDisorders);
 router.get('/top-disorders/:countryCode', disorderController.getTopDisorders);
 router.get('/daly-growth/:countryCode/:disorderId', disorderController.getDalyGrowth);
 router.get('/depression-comparison/:countryCode', disorderController.getDepressionGenderComparison);
