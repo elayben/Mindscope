@@ -30,7 +30,7 @@ A full-stack web application for visualizing mental health data and insights. Th
 ### Project Setup (Backend + Frontend)
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/elayben/Mindscope.git
    cd mindscope
    ```
 
