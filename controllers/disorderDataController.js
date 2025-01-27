@@ -130,6 +130,7 @@ exports.getDisorderPrevalenceByContinent = async (req, res) => {
        FROM in_year iy
        JOIN countries c ON iy.country_code = c.country_code
        JOIN disorders d ON iy.disorder_id = d.disorder_id
+       WHERE c.continent IS NOT NULL AND c.continent <> '\r'
        GROUP BY c.continent, d.disorder_type`
     );
     res.json(rows);
