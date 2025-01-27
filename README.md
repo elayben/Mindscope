@@ -41,7 +41,7 @@ A full-stack web application for visualizing mental health data and insights. Th
 
 3. Set up the environment variables in `.env`:
    ```plaintext
-   PORT=5000
+   PORT=5014
    DB_HOST=localhost
    DB_USER=<your-database-username>
    DB_PASSWORD=<your-database-password>
@@ -61,7 +61,7 @@ A full-stack web application for visualizing mental health data and insights. Th
 
 1. Open the app in your browser:
    ```
-   http://localhost:5000
+   http://localhost:5014
    ```
 
 2. Log in or register to access the main dashboard.
