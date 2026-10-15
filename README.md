@@ -53,8 +53,10 @@ A full-stack web application for visualizing mental health data and insights. Th
 
 5. Start the server:
    ```bash
-   node mindscope.js
+   npm start
    ```
+
+The React client is already built into `build/` and served by the same Express server, so there is nothing else to run.
 ---
 
 ## Usage
